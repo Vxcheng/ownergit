@@ -1,0 +1,2 @@
+# ownergit
+go base learning
