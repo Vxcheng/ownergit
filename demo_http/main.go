@@ -13,6 +13,12 @@ const (
 	a, b = 1, 2
 )
 
+const (
+	tag1 = int64(1)
+	tag2 = 2
+	tag3 = string("hello")
+)
+
 var list = []int{1, 2, 3, 4, 5}
 
 var infers = map[interface{}]interface{}{
@@ -21,6 +27,8 @@ var infers = map[interface{}]interface{}{
 }
 
 func main() {
+	fmt.Printf("tag1: %T,\t tag2: %T,\t tag3: %T\n", tag1, tag2, tag3)
+
 	for key, value := range infers {
 		fmt.Printf("key: %v, value: %v\n", key, value)
 	}
@@ -28,6 +36,7 @@ func main() {
 	log.Printf("a: %d, b: %d \n", a, b)
 	log.Println("running a http demo server...")
 	http.HandleFunc("/", WebHookHandler)
+	http.HandleFunc("/hello", HelloHandler)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", Hport), nil))
 }
 
@@ -40,4 +49,10 @@ func WebHookHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("alert msg: %s", string(msgByte))
 	return
+}
+
+func HelloHandler(w http.ResponseWriter, r *http.Request) {
+	cells := r.URL.Query()
+	log.Println(cells)
+	// w.Write([]byte(cells))
 }

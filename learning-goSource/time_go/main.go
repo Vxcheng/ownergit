@@ -42,10 +42,11 @@ func scanDisk(i int) {
 
 func printTime() {
 	t := time.Now()
-	fmt.Printf("Unix: %d,\nUnixNano: %d,\nString: %s,\tFormat: %s\n", t.Unix(), t.UnixNano(), t.String(), t.Format(layout))
+	fmt.Printf("Unix: %d,\nUnixNano: %d,\nString: %s,\nFormat: %s\n", t.Unix(), t.UnixNano(), t.String(), t.Format(layout))
+	fmt.Printf("td: %s\n", time.Date(t.Year(), t.Month(), t.Day()-1, t.Hour(), 0, 0, 0, time.UTC).String())
 	fmt.Printf("===================\n")
 
-	pastM, err := getPastTimeStamp("-1h")
+	pastM, err := getPastTimeStamp("-1m30s")
 	if err != nil {
 		log.Println("err: ", err.Error())
 		return
