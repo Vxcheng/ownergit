@@ -23,7 +23,7 @@ func Stu_select() {
 }
 
 func init() {
-	stu1()
+	stu4()
 }
 
 func stu1() {
@@ -35,14 +35,16 @@ func stu1() {
 		c <- fmt.Errorf("this is a err")
 	}(ch)
 
-	select {
-	case err := <-ch:
-		if err != nil {
-			log.Printf("err: %v\n", err)
+	for {
+		select {
+		case err := <-ch:
+			if err != nil {
+				log.Printf("err: %v\n", err)
+			}
+			log.Println("success")
+		case <-time.After(time.Second * 2):
+			log.Printf("2 second timeout\n")
 		}
-		log.Println("success")
-	case <-time.After(time.Second * 2):
-		log.Printf("2 second timeout\n")
 	}
 
 }
@@ -55,13 +57,14 @@ func stu2() {
 
 		for {
 			select {
-			case num := <-ch:
-				log.Println("num = ", num)
+
 			case <-time.After(3 * time.Second):
 				quit <- true
 				goto lable
-				//return   退出func(),如果用break只会跳出当前case
-				//runtime.Goexit()  结束这个goroutine
+			//return   退出func(),如果用break只会跳出当前case
+			//runtime.Goexit()  结束这个goroutine
+			case num := <-ch:
+				log.Println("num = ", num)
 			}
 		}
 	lable: //lable可以在func（）内任意位置，但不可在函数之外

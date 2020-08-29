@@ -9,7 +9,7 @@ import (
 
 func main() {
 	fmt.Println("golang 25个关键字学习")
-	chooseFunc("defer")
+	chooseFunc("select")
 	fmt.Println("finished!!!")
 }
 
