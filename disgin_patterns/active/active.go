@@ -1,4 +1,4 @@
-package active
+package main
 
 import (
 	"log"
@@ -73,4 +73,8 @@ func NewService(buffer int) *Service {
 	}
 	go s.schedule()
 	return s
+}
+
+func main() {
+	Stu_ActiveObject()
 }

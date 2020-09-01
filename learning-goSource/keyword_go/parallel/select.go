@@ -8,6 +8,37 @@ import (
 
 func Stu_select() {
 	log.Println("学习select关键字")
+	stu5_select()
+}
+
+// multiple channel
+func stu5_select() {
+	aCh, bCh := make(chan int), make(chan bool)
+	go func() {
+		for {
+			aCh <- 1
+			time.Sleep(time.Millisecond * 500)
+		}
+
+	}()
+	go func() {
+		for {
+			bCh <- true
+			time.Sleep(time.Second * 500)
+		}
+	}()
+
+	for {
+		select {
+		case val := <-aCh:
+			log.Println("val: ", val)
+		case t := <-bCh:
+			log.Println("t: ", t)
+		}
+	}
+}
+
+func stu4() {
 	go func() {
 		ticker := time.NewTicker(time.Duration(time.Second * 3))
 		for {
@@ -22,11 +53,7 @@ func Stu_select() {
 	}
 }
 
-func init() {
-	stu4()
-}
-
-func stu1() {
+func stu2_select() {
 	// count := 0
 	ch := make(chan error)
 
@@ -49,7 +76,7 @@ func stu1() {
 
 }
 
-func stu2() {
+func stu1_select() {
 	ch := make(chan int)
 	quit := make(chan bool)
 
@@ -101,7 +128,7 @@ func run(task_id, sleeptime int, ch chan string) {
 	return
 }
 
-func stu3() {
+func stu3_select() {
 	input := []int{3, 2, 1}
 	timeout := 2
 	chLimit := make(chan bool, 1)

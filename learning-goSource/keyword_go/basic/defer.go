@@ -6,17 +6,7 @@ import (
 )
 
 func Stu_defer() {
-	p := &Person{28}
-
-	defer log.Printf("a: %d\n", p.age)
-	defer func(person *Person) {
-		log.Printf("b: %d\n", person.age)
-	}(p)
-	defer func() {
-		log.Printf("c: %d\n", p.age)
-	}()
-	p.age = 29
-	return
+	stu3_defer()
 }
 
 type Person struct {
@@ -37,8 +27,18 @@ func stu1() {
 	return
 }
 
-func init() {
-	stu2()
+func stu3_defer() {
+	p := &Person{28}
+
+	defer log.Printf("a: %d\n", p.age)
+	defer func(person *Person) {
+		log.Printf("b: %d\n", person.age)
+	}(p)
+	defer func() {
+		log.Printf("c: %d\n", p.age)
+	}()
+	p.age = 29
+	return
 }
 
 func stu2() {

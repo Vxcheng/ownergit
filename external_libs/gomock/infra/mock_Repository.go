@@ -2,7 +2,7 @@
 // Source: db.go
 
 // Package mock_infra is a generated GoMock package.
-package mock_infra
+package infra
 
 import (
 	reflect "reflect"

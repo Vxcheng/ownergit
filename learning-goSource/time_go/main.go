@@ -7,14 +7,16 @@ import (
 )
 
 const (
-	ScanInterval = 5
+	ScanInterval = 2
 	layout       = "2006-01-02 15:04:05"
 )
 
 func main() {
 	// covert()
 
-	printTime()
+	// stu_Ticker()
+	afterTimeOut()
+	fmt.Println("finished.")
 }
 
 func covert() {
@@ -27,6 +29,7 @@ func covert() {
 
 func stu_Ticker() {
 	tick := time.NewTicker(time.Duration(time.Second * ScanInterval)) // 超时控制
+	scanDisk(1)
 	i := 0
 	for {
 		select {
@@ -61,4 +64,20 @@ func getPastTimeStamp(str string) (int64, error) {
 	}
 
 	return time.Now().Add(d).Unix(), nil
+}
+
+func afterTimeOut() {
+	log.Println("start")
+	exitChan := make(chan bool)
+	go func() {
+		time.Sleep(time.Second * 6)
+		exitChan <- true
+	}()
+
+	select {
+	case s := <-exitChan:
+		log.Println("signal: ", s)
+	case <-time.After(time.Second * 2):
+		log.Println("time out")
+	}
 }
