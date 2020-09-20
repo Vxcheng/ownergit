@@ -5,20 +5,23 @@ import (
 )
 
 func main() {
-	overtime(August)
+	overtime(September)
 }
 
 // 每天打卡时间需满12个小时， 周五减一个小时, 精确到分钟
 type MonthDays int
 
 const (
-	August MonthDays = 21
+	August    MonthDays = 21
+	September MonthDays = iota + 1
 )
 
 func overtime(m MonthDays) {
 	switch m {
 	case August:
 		m.August()
+	case September:
+		m.September()
 	}
 }
 
@@ -33,8 +36,20 @@ func (m MonthDays) August() {
 		+(12*60 + 94) + (12*60 + 22) + (12*60 + 77) + (12*60 + 17) + (11*60 + 38) +
 		+(9*60 + 12)
 	sub := totalTime - needTime
-	fmt.Printf("totalTime-needTime = %d, about to '%.2fh'.\n", sub, float64(sub/60))
+	fmt.Printf("at 'August', totalTime-needTime = %d, about to '%.2fh'.\t", sub, float64(sub/60))
 	if sub > 0 {
-		fmt.Println("ok!")
+		fmt.Println(">>>>>>>>>>>> ok!")
+	}
+}
+
+func (m MonthDays) September() {
+	offTime := 0   // 请假时间
+	totalTime := 0 // 实际出勤
+	totalTime += (+38) + (+72) + (+26) + (-2*60 - 7) +
+		+(1*60 + 17) + (+15) + (1*60 + 9) + (+25) + (-1*60 - 49)
+	sub := totalTime - offTime
+	fmt.Printf("at 'September', aver time sub = %d, about to '%.2fh'.\t", sub, float64(sub/60))
+	if sub > 0 {
+		fmt.Println(">>>>>>>>>>>> ok!")
 	}
 }

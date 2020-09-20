@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 )
 
@@ -11,8 +12,19 @@ type registerMap map[string]cmdFunc
 var register registerMap
 
 func main() {
-	exePrint("FindStringSubmatch")
+	// exePrint("FindStringSubmatch")
+	validCellName()
+	log.Println("finish")
 }
+
+func validCellName() {
+	nodeName := "$$$cell01"
+	reName1 := regexp.MustCompile(`[a-zA-Z][a-zA-Z0-9\-\.]+$`)
+	if !reName1.MatchString(nodeName) {
+		log.Println("not match!")
+	}
+}
+
 func exePrint(name string) {
 	register[name]()
 }

@@ -13,7 +13,7 @@ func Stu_select() {
 
 // multiple channel
 func stu5_select() {
-	aCh, bCh := make(chan int), make(chan bool)
+	aCh, bCh := make(chan int), make(chan int)
 	go func() {
 		for {
 			aCh <- 1
@@ -23,8 +23,8 @@ func stu5_select() {
 	}()
 	go func() {
 		for {
-			bCh <- true
-			time.Sleep(time.Second * 500)
+			bCh <- 2
+			time.Sleep(time.Millisecond * 500)
 		}
 	}()
 
@@ -34,6 +34,8 @@ func stu5_select() {
 			log.Println("val: ", val)
 		case t := <-bCh:
 			log.Println("t: ", t)
+		case <-time.After(time.Millisecond * 500):
+			log.Println("timeout")
 		}
 	}
 }

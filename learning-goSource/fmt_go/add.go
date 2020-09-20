@@ -13,6 +13,10 @@ func Add(a, b uint64) uint64 {
 func Append() {
 	slic := make([]string, 0)
 	child := signal()
+	for _,_  = range child {
+
+	}
+
 	slic = append(slic, child...)
 }
 
@@ -21,6 +25,7 @@ func signal() []string {
 }
 
 func main() {
+	Append()
 	fmt.Println(Add(2, 15))
 	fmt.Printf("node: %v\n", Storage)
 	a := int64(10)
