@@ -10,8 +10,35 @@ import (
 
 func main() {
 	log.Println("start")
-	WithTimeout()
+	// WithTimeout()
+	outFunc()
 	log.Println("finish")
+}
+
+func outChan() {
+	ch := make(chan int)
+	go func(c chan int) {
+		time.Sleep(time.Second * 2)
+		log.Println("out")
+	}(ch)
+	for {
+		select {
+		case <-time.After(4 * time.Second):
+		}
+	}
+
+}
+
+func outFunc() {
+	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+	defer cancel()
+	go func(c context.Context) {
+		time.Sleep(time.Second * 6)
+		log.Println("out")
+	}(ctx)
+	select {
+	case <-ctx.Done():
+	}
 }
 
 func WithTimeout() {
@@ -30,7 +57,7 @@ func chiHanBao(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("stop \n")
+			fmt.Println("stop ")
 			return
 		default:
 			incr := rand.Intn(5)

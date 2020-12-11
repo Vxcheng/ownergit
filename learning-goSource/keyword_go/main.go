@@ -13,7 +13,7 @@ import (
 //内置函数：append(), cap(), close(), copy(), complex(), delete(), imag(), len() make(), new(), panic(), print(), println(), real(), recover()
 func main() {
 	fmt.Println("golang 25个关键字学习")
-	chooseFunc("select")
+	chooseFunc("defer")
 	fmt.Println("finished!!!")
 }
 

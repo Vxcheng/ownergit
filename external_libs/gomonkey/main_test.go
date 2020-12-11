@@ -79,7 +79,4 @@ func TestUser(t *testing.T) {
 	})
 	fmt.Printf("out globalSub: %d\n", globalSub)
 
-	t.Run("UnSafePoint", func(t *testing.T) {
-		UnSafePoint()
-	})
 }

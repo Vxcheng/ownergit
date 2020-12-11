@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const Hport = "5001"
+const Hport = "10008"
 
 const (
 	a, b = 1, 2
@@ -26,11 +26,19 @@ var infers = map[interface{}]interface{}{
 	"hello": true,
 }
 
+func getErr() error  {
+	return nil
+}
+
 func main() {
 	fmt.Printf("tag1: %T,\t tag2: %T,\t tag3: %T\n", tag1, tag2, tag3)
 
 	for key, value := range infers {
 		fmt.Printf("key: %v, value: %v\n", key, value)
+	}
+
+	if err := getErr(); err != nil {
+		return
 	}
 
 	log.Printf("a: %d, b: %d \n", a, b)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -13,7 +14,7 @@ func Add(a, b uint64) uint64 {
 func Append() {
 	slic := make([]string, 0)
 	child := signal()
-	for _,_  = range child {
+	for _, _ = range child {
 
 	}
 
@@ -24,8 +25,23 @@ func signal() []string {
 	return nil
 }
 
+func printSN() {
+	oldSN := "DR0757M0A1A6FEGC"
+	oldSlot := 7
+	querySql := fmt.Sprintf(`select id, eventStartsAt from alert_msg where alertItemName='%s' and sourceMsg like '%%%s%%' and sourceMsg like '%%%s%%' and sourceMsg like '%%firing%%' order by id desc`, "硬盘离线", fmt.Sprintf(`\"meta_id\":\"%s\"`, oldSN), fmt.Sprintf(`\"slot\":\"%d\"`, oldSlot))
+	fmt.Println("sql: ", querySql)
+
+}
+
 func main() {
 	Append()
+	convert1()
+	similarTest()
+
+	l := strings.Split("a", ",")
+	fmt.Println(l)
+	printSN()
+
 	fmt.Println(Add(2, 15))
 	fmt.Printf("node: %v\n", Storage)
 	a := int64(10)
@@ -43,6 +59,30 @@ func main() {
 	out := Formatted("DD/_DROPPED_0002_OCR")
 	fmt.Println("out: ", out)
 	convertString()
+}
+
+func convert1() {
+	baseLid := "0x1f"
+	i, err := strconv.ParseInt(baseLid, 0, strconv.IntSize)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(i)
+}
+
+type User struct {
+	Name string
+	Age  int
+}
+
+func similarTest() {
+	var u1 *User
+	u1 = &User{
+		Name: "u1",
+		Age:  2,
+	}
+	u2 := *u1
+	fmt.Printf("u1: %+v, u2: %+v\n", u1, u2)
 }
 
 func Formatted(key string) string {

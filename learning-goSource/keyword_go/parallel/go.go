@@ -7,7 +7,7 @@ import (
 	// "time"
 )
 
-func Stu_go()  {
+func Stu_go() {
 	log.Println("学习go关键字")
 	stu1_go()
 }

@@ -91,7 +91,7 @@ func IterString() {
 	r := 'a'
 	fmt.Printf("r: %v, t: %T\n", r, r)
 	fmt.Printf("r: %v\n", string(r))
-	fmt.Printf(string(97))
+	fmt.Print(rune(97))
 
 	fmt.Println("-------------")
 

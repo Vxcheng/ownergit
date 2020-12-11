@@ -14,7 +14,7 @@ func main() {
 	wf.StartWorkFlow(4, 20)
 	for i := 0; i < 100; i++ {
 		payload := pool.Payload{
-			fmt.Sprintf("产品-%08d", i+1),
+			Name: fmt.Sprintf("产品-%08d", i+1),
 		}
 		wJob := pool.Job{
 			Payload: payload,
