@@ -26,7 +26,7 @@ var infers = map[interface{}]interface{}{
 	"hello": true,
 }
 
-func getErr() error  {
+func getErr() error {
 	return nil
 }
 

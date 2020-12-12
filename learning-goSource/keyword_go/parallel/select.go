@@ -13,29 +13,67 @@ func Stu_select() {
 
 // multiple channel
 func stu5_select() {
-	aCh, bCh := make(chan int), make(chan int)
-	go func() {
-		for {
-			aCh <- 1
-			time.Sleep(time.Millisecond * 500)
-		}
+	{
+		c1, c2 := make(chan int), make(chan int)
+		count := 10
+		go func() {
+			for ; count > 0; count-- {
+				c1 <- count
+				time.Sleep(time.Millisecond * 200)
+			}
+		}()
 
-	}()
-	go func() {
-		for {
-			bCh <- 2
-			time.Sleep(time.Millisecond * 500)
-		}
-	}()
+		go func() {
+			for ; count > 0; count-- {
+				c2 <- count
+				time.Sleep(time.Millisecond * 200)
+			}
+		}()
 
-	for {
-		select {
-		case val := <-aCh:
-			log.Println("val: ", val)
-		case t := <-bCh:
-			log.Println("t: ", t)
-		case <-time.After(time.Millisecond * 500):
-			log.Println("timeout")
+		sum := count
+		for ; sum > 0; sum-- {
+			select {
+			case v1 := <-c1:
+				log.Printf("---- %v <- c1\n", v1)
+			case v2 := <-c2:
+				log.Printf("%v <- c2\n", v2)
+			}
+		}
+	}
+
+	{
+		aCh, bCh := make(chan int), make(chan int)
+
+		go func() {
+			count := 0
+			for {
+				count++
+				aCh <- count
+				time.Sleep(time.Millisecond * 500)
+			}
+
+		}()
+		go func() {
+			count := 0
+			for {
+				count++
+				bCh <- count
+				time.Sleep(time.Millisecond * 200)
+			}
+		}()
+
+		for {
+			select {
+			case val := <-aCh:
+				log.Printf("%v: <- aCh", val)
+			case t := <-bCh:
+				log.Printf("---- %v: <- bCh", t)
+			case <-time.After(time.Millisecond * 500):
+				log.Println("timeout")
+
+				// default:
+				// log.Println("default")
+			}
 		}
 	}
 }

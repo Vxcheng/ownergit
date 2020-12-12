@@ -19,7 +19,7 @@ func main() {
 		SwitchNetPortNumber:  "13",
 		MetaHostIp:           "127.0.0.1",
 		MetaUpdatedTimestamp: 1584427013,
-		PortGuid: "111111111222",
+		PortGuid:             "111111111222",
 		MetaHostname:         "cell03",
 	}
 	m.AddOrUpdate()
@@ -86,13 +86,13 @@ func (m InfiniBandPort) String() string {
 func (m *InfiniBandPort) AddOrUpdate() error {
 	o := orm.NewOrm()
 	b := &InfiniBandPort{
-		Name: m.Name,
-		Port: m.Port,
-		MetaHostname: m.MetaHostname,
-		MetaHostIp: m.MetaHostIp,
+		Name:                 m.Name,
+		Port:                 m.Port,
+		MetaHostname:         m.MetaHostname,
+		MetaHostIp:           m.MetaHostIp,
 		MetaUpdatedTimestamp: m.MetaUpdatedTimestamp,
-		SwitchNumber: m.SwitchNumber,
-		SwitchNetPortNumber: m.SwitchNetPortNumber,
+		SwitchNumber:         m.SwitchNumber,
+		SwitchNetPortNumber:  m.SwitchNetPortNumber,
 	}
 	err := o.Read(m, "PortGuid")
 	if err != nil && err != orm.ErrNoRows {
