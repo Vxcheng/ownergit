@@ -12,8 +12,8 @@ type registerMap map[string]cmdFunc
 var register registerMap
 
 func main() {
-	// exePrint("FindStringSubmatch")
-	validCellName()
+	exePrint("FindStringSubmatch")
+	// validCellName()
 	log.Println("finish")
 }
 
@@ -74,12 +74,12 @@ func FindStringIndex() {
 
 func FindStringSubmatch() {
 	fmt.Println("学习FindStringSubmatch")
-	ss := "NAME=ora.DATA.dg\nTYPE=ora.diskgroup.type\nTARGET=ONLINE          , ONLINE\nSTATE=ONLINE on rac048, ONLINE on rac049"
 	re := regexp.MustCompile("a(x*)b(y|z)c")
 	fmt.Printf("%q\n", re.FindStringSubmatch("-axxxbyc-"))
 	fmt.Printf("%q\n", re.FindStringSubmatch("-abzc-"))
 	fmt.Printf("%q\n", re.FindStringSubmatch("abc"))
-
+	
+	ss := "NAME=ora.DATA.dg\nTYPE=ora.diskgroup.type\nTARGET=ONLINE          , ONLINE\nSTATE=ONLINE on rac048, ONLINE on rac049"
 	re2 := regexp.MustCompile("TARGET=(.*)")
 	fmt.Printf("%q\n", re2.FindStringSubmatch(ss))
 }

@@ -16,7 +16,7 @@ type User struct {
 func main() {
 	fmt.Println("测试strings")
 	// testChan()
-	Split()
+	// Split()
 }
 
 func ParseFloat() {

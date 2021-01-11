@@ -13,7 +13,7 @@ import (
 //内置函数：append(), cap(), close(), copy(), complex(), delete(), imag(), len() make(), new(), panic(), print(), println(), real(), recover()
 func main() {
 	fmt.Println("golang 25个关键字学习")
-	chooseFunc("select")
+	chooseFunc("goto")
 	fmt.Println("finished!!!")
 }
 
@@ -29,6 +29,8 @@ func chooseFunc(key string) {
 		parallel.Stu_go()
 	case "switch":
 		basic.Stu_switch()
+	case "goto": 
+	 basic.Stu_Goto()
 	default:
 		fmt.Println("未识别的关键字")
 	}

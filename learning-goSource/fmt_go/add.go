@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"encoding/json"
 )
 
 func Add(a, b uint64) uint64 {
@@ -25,15 +26,36 @@ func signal() []string {
 	return nil
 }
 
-func printSN() {
-	oldSN := "DR0757M0A1A6FEGC"
-	oldSlot := 7
-	querySql := fmt.Sprintf(`select id, eventStartsAt from alert_msg where alertItemName='%s' and sourceMsg like '%%%s%%' and sourceMsg like '%%%s%%' and sourceMsg like '%%firing%%' order by id desc`, "硬盘离线", fmt.Sprintf(`\"meta_id\":\"%s\"`, oldSN), fmt.Sprintf(`\"slot\":\"%d\"`, oldSlot))
-	fmt.Println("sql: ", querySql)
+func promote() {
+	type User struct {
+		Name string
+		Age   int
+	}
 
+	type Team struct {
+		User
+		Age string
+	}
+
+	u := User{
+		Name: "xiaoming",
+		Age: 10,
+	}
+	t := Team{
+		User: u,
+		Age: "20",
+	}
+	fmt.Printf("t: %+v\n", t)
+
+	buffT, err := json.Marshal(t)
+	if err != nil {
+		return
+	}
+	fmt.Printf("t_str: %s\n", string(buffT))
 }
 
 func main() {
+	promote()
 	Append()
 	convert1()
 	similarTest()

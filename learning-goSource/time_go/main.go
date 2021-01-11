@@ -13,10 +13,18 @@ const (
 
 func main() {
 	// covert()
-
 	// stu_Ticker()
-	afterTimeOut()
+	// afterTimeOut()
+	timeSub()
+
 	fmt.Println("finished.")
+}
+
+func timeSub() {
+	t1 := time.Now().UnixNano()
+	t2 := time.Now().Unix()
+
+	fmt.Sprintf("unixNano: %d, unix: %d", t1, t2)
 }
 
 func covert() {
