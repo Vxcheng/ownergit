@@ -7,16 +7,14 @@ import (
 
 func Stu_defer() {
 	log.Println("learn defer")
-	stu1_defer()
-	stu2_defer()
-	stu3_defer()
+	// stu1_defer()
 }
 
 type Person struct {
 	age int
 }
 
-func stu1_defer() {
+func deferStu1() {
 	p := &Person{28}
 
 	defer log.Printf("a1: %d\n", p.age)
@@ -30,7 +28,7 @@ func stu1_defer() {
 	return
 }
 
-func stu2_defer() {
+func deferStu2() {
 	p := &Person{28}
 
 	defer log.Printf("a: %d\n", p.age)
@@ -55,7 +53,7 @@ func (s *statusErr) Error() string {
 	return ""
 }
 
-func stu3_defer() {
+func deferStu3() {
 	{
 		value := 0
 		defer func() {
@@ -77,16 +75,42 @@ func stu3_defer() {
 		status.err = err
 	}
 
-	{
-		str, err := stu3_defer_0()
-		log.Printf("str: %s, err: %v", str, err)
-
-	}
 }
 
-func stu3_defer_0() (str string, err error) {
+func deferStu4() (str string, err error) {
 	defer func() {
 		str, err = "hello", nil
 	}()
 	return "world", fmt.Errorf("world")
+}
+
+func deferInc() (v int) {
+	defer func() { v++ }()
+	return 42
+}
+
+func deferPrint() {
+	for i := 0; i < 3; i++ {
+		defer func() {
+			println(i)
+		}()
+	}
+
+}
+
+func deferPrint1() {
+	for i := 0; i < 3; i++ {
+		i := i // 定义一个循环体内局部变量i
+		defer func() {
+			println(i)
+		}()
+	}
+}
+
+func deferPrint2() {
+	for i := 0; i < 3; i++ { // 通过函数传入i // defer 语句会马上对调用参数求值
+		defer func(i int) {
+			println(i)
+		}(i)
+	}
 }

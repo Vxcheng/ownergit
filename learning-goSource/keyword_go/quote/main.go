@@ -1,4 +1,4 @@
-package main
+package quote
 
 import (
 	"fmt"
@@ -10,11 +10,6 @@ const (
 )
 
 var glabelMap map[int]int
-
-func main() {
-	fmt.Println("golang基础类型、引用类型")
-	printInfo("string")
-}
 
 type Style struct {
 	style string

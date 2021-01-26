@@ -25,6 +25,18 @@ func timeSub() {
 	t2 := time.Now().Unix()
 
 	fmt.Sprintf("unixNano: %d, unix: %d", t1, t2)
+	parseString()
+	fmt.Println("finished.")
+}
+
+func parseString() {
+	str := "2020-12-21T09:40:41+08:00"
+	t, err := time.Parse(layout, str)
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println(t.String())
 }
 
 func covert() {
