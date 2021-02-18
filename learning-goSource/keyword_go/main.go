@@ -29,8 +29,8 @@ func chooseFunc(key string) {
 		parallel.Stu_go()
 	case "switch":
 		basic.Stu_switch()
-	case "goto": 
-	 basic.Stu_Goto()
+	case "goto":
+		basic.Stu_Goto()
 	default:
 		fmt.Println("未识别的关键字")
 	}

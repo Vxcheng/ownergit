@@ -78,7 +78,7 @@ func FindStringSubmatch() {
 	fmt.Printf("%q\n", re.FindStringSubmatch("-axxxbyc-"))
 	fmt.Printf("%q\n", re.FindStringSubmatch("-abzc-"))
 	fmt.Printf("%q\n", re.FindStringSubmatch("abc"))
-	
+
 	ss := "NAME=ora.DATA.dg\nTYPE=ora.diskgroup.type\nTARGET=ONLINE          , ONLINE\nSTATE=ONLINE on rac048, ONLINE on rac049"
 	re2 := regexp.MustCompile("TARGET=(.*)")
 	fmt.Printf("%q\n", re2.FindStringSubmatch(ss))

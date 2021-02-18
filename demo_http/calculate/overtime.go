@@ -14,8 +14,8 @@ type MonthDays int
 const (
 	August    MonthDays = 8
 	September MonthDays = 9
-	Octorbor MonthDays = 10
-	November MonthDays = 11
+	Octorbor  MonthDays = 10
+	November  MonthDays = 11
 )
 
 func overtime(m MonthDays) {
@@ -49,13 +49,13 @@ func (m MonthDays) August() {
 }
 
 func (m MonthDays) September() {
-	offTime := 1*3*60   // 请假时间
-	totalTime := 0 // 实际出勤
+	offTime := 1 * 3 * 60 // 请假时间
+	totalTime := 0        // 实际出勤
 	totalTime += (+38) + (+72) + (+26) + (-2*60 - 7) +
-		+(1*60 + 17) + (+15) + (1*60 + 9) + (+25) + (-1*60 - 49)+
-		+ (1*60+ 24) + (-45) + (1*60+26) + (1*60+29) + (-1*60-18) +
-		+(10) + (2*60+5) + (1*60+56) + (1*60+4)+
-		+(40)+ (44) + (28)+ (-5*60-30)
+		+(1*60 + 17) + (+15) + (1*60 + 9) + (+25) + (-1*60 - 49) +
+		+(1*60 + 24) + (-45) + (1*60 + 26) + (1*60 + 29) + (-1*60 - 18) +
+		+(10) + (2*60 + 5) + (1*60 + 56) + (1*60 + 4) +
+		+(40) + (44) + (28) + (-5*60 - 30)
 	sub := totalTime - offTime
 	fmt.Printf("at 'September', aver time sub = %d, about to '%.2fh'.\t", sub, float64(sub/60))
 	if sub > 0 {
@@ -64,12 +64,12 @@ func (m MonthDays) September() {
 }
 
 func (m MonthDays) Octorbor() {
-	offTime := 1*3*60   // 请假时间
-	totalTime := 0 // 实际出勤
+	offTime := 1 * 3 * 60 // 请假时间
+	totalTime := 0        // 实际出勤
 	totalTime += (+28) +
-	 +(+34) + (1*60 + 48) + (1*60 + 20) + (25) + ( -2*60 + 9) +
-	  +(1*60 - 6) + (+20) + (-2*60 +11)+
-		+ (38) + (13) + (54) + (33)
+		+(+34) + (1*60 + 48) + (1*60 + 20) + (25) + (-2*60 + 9) +
+		+(1*60 - 6) + (+20) + (-2*60 + 11) +
+		+(38) + (13) + (54) + (33)
 	sub := totalTime - offTime
 	fmt.Printf("at 'September', aver time sub = %d, about to '%.2fh'.\t", sub, float64(sub/60))
 	if sub > 0 {
@@ -77,13 +77,13 @@ func (m MonthDays) Octorbor() {
 	}
 }
 
-func  (m MonthDays) November() {
+func (m MonthDays) November() {
 	offTime := 0   // 请假时间
 	totalTime := 0 // 实际出勤
-	totalTime += (+40)  + (+37-3*60) + (+32) + (+41- 3*60) + 
-	 +(+60+28) + (1*60 + 45) + (+5) + (54) + ( -2*60 + 15) + (6*60+ 19)+
-	  +(44) + (+18) + (1)+ (55) + (60+44)+
-		+ (60+26) + (16) + (35) + (60+24)+ (-2*60+2) 
+	totalTime += (+40) + (+37 - 3*60) + (+32) + (+41 - 3*60) +
+		+(+60 + 28) + (1*60 + 45) + (+5) + (54) + (-2*60 + 15) + (6*60 + 19) +
+		+(44) + (+18) + (1) + (55) + (60 + 44) +
+		+(60 + 26) + (16) + (35) + (60 + 24) + (-2*60 + 2)
 	sub := totalTime - offTime
 	fmt.Printf("at 'September', aver time sub = %d, about to '%.2fh'.\t", sub, float64(sub/60))
 	if sub > 0 {

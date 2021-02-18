@@ -24,7 +24,7 @@ func timeSub() {
 	t1 := time.Now().UnixNano()
 	t2 := time.Now().Unix()
 
-	fmt.Sprintf("unixNano: %d, unix: %d", t1, t2)
+	fmt.Printf("unixNano: %d, unix: %d", t1, t2)
 	parseString()
 	fmt.Println("finished.")
 }

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
-	"encoding/json"
 )
 
 func Add(a, b uint64) uint64 {
@@ -29,7 +29,7 @@ func signal() []string {
 func promote() {
 	type User struct {
 		Name string
-		Age   int
+		Age  int
 	}
 
 	type Team struct {
@@ -39,11 +39,11 @@ func promote() {
 
 	u := User{
 		Name: "xiaoming",
-		Age: 10,
+		Age:  10,
 	}
 	t := Team{
 		User: u,
-		Age: "20",
+		Age:  "20",
 	}
 	fmt.Printf("t: %+v\n", t)
 
@@ -62,7 +62,6 @@ func main() {
 
 	l := strings.Split("a", ",")
 	fmt.Println(l)
-	printSN()
 
 	fmt.Println(Add(2, 15))
 	fmt.Printf("node: %v\n", Storage)
