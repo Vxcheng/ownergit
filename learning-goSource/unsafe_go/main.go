@@ -28,3 +28,34 @@ func UnSafePoint() {
 func main() {
 	UnSafePoint()
 }
+
+type s struct {
+	a int
+	b string
+	c []int
+	d func()
+	e interface{}
+}
+
+func unsafeFmt() {
+	a := int(1)
+	println(unsafe.Alignof(a))
+	println(unsafe.Sizeof(a))
+	//
+	s := s{}
+	fmt.Println(unsafe.Sizeof(s), unsafe.Alignof(s))
+	fmt.Println(unsafe.Sizeof(s.a), unsafe.Alignof(s.a))
+	fmt.Println(unsafe.Sizeof(s.b), unsafe.Alignof(s.b))
+	fmt.Println(unsafe.Sizeof(s.c), unsafe.Alignof(s.c))
+	fmt.Println(unsafe.Sizeof(s.d), unsafe.Alignof(s.d))
+	fmt.Println(unsafe.Sizeof(s.e), unsafe.Alignof(s.e))
+
+	p := (*int16)(unsafe.Pointer(uintptr(unsafe.Pointer(&s)) + unsafe.Offsetof(s.a)))
+	fmt.Println(p, s.a)
+	*p = 42
+	fmt.Println(s.a)
+}
+
+func float64bits(f float64) uint64 {
+	return *(*uint64)(unsafe.Pointer(&f))
+}
