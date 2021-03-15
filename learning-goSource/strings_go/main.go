@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -17,6 +18,20 @@ func main() {
 	fmt.Println("测试strings")
 	// testChan()
 	// Split()
+}
+
+// 关闭{}zData{}服务, {}, ["cell02", "store"]
+func ReplacePlaceholder(old, sep string, keywords []string) (new string) {
+	fields := strings.Split(old, sep)
+	if len(fields) > 1 && len(fields)-1 == len(keywords) {
+		for i, keyword := range keywords {
+			new += fields[i] + keyword
+		}
+		new += fields[len(fields)-1]
+	} else {
+		new = old
+	}
+	return
 }
 
 func ParseFloat() {
@@ -63,4 +78,9 @@ func testChan() {
 		fmt.Println("elem: ", elem)
 	}
 	fmt.Println("over")
+}
+
+func convert(s string) float64 {
+	f, _ := strconv.ParseFloat(s, 64)
+	return math.Round(f)
 }
