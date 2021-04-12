@@ -27,4 +27,17 @@ func TestDefer(t *testing.T) {
 		deferPrint1()
 		deferPrint2()
 	})
+
+	t.Run("", func(t *testing.T) {
+		got := returnButDefer()
+		t.Log(got)
+
+		stackPush()
+	})
+}
+
+func TestExample(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		example1()
+	})
 }
