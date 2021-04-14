@@ -85,7 +85,7 @@ func RunCloseByContext() {
 		wg.Add(1)
 		go func() {
 			if err := workerC(ctx, &wg); err != nil {
-				log.Fatalf("err: %#v", err)
+				log.Printf("err: %#v", err)
 			}
 		}()
 	}

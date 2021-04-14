@@ -24,4 +24,8 @@ func TestRunPrimeNumer(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		RunCloseByContext()
 	})
+
+	t.Run("", func(t *testing.T) {
+		TryLock()
+	})
 }
