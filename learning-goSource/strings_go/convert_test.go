@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestReplaceIndividually(t *testing.T) {
@@ -135,4 +138,39 @@ func TestSplit(t *testing.T) {
 		values := raidRe.FindStringSubmatch(fmt.Sprintf("%s1", RAID))
 		t.Log(values)
 	})
+}
+func TestStrconv(t *testing.T) {
+	want := int64(2048)
+	got, err := strconv.ParseInt(fmt.Sprintf("%f", 2048.0), 10, 64)
+	assert.Nil(t, err)
+	if got != want {
+		t.Fail()
+	}
+}
+
+func TestMapPoint(t *testing.T) {
+	t.Run("notUseMapPoint", func(t *testing.T) {
+
+		dict := make(map[string]int)
+		for i := 0; i < 4; i++ {
+			notUseMapPoint(dict)
+		}
+
+		t.Log(dict)
+	})
+
+	t.Run("useMapPoint", func(t *testing.T) {
+		dict := make(map[string]*int)
+		useMapPoint(dict)
+		t.Log(dict)
+	})
+}
+
+func useMapPoint(dict map[string]*int) {
+	tmp := 2
+	dict["a"] = &tmp
+}
+
+func notUseMapPoint(dict map[string]int) {
+	dict["a"] = 1
 }

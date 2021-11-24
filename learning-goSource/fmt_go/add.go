@@ -55,6 +55,10 @@ func promote() {
 }
 
 func main() {
+	Scan_stu1()
+}
+
+func basic() {
 	promote()
 	Append()
 	convert1()
@@ -132,4 +136,18 @@ func convertString() {
 	for i, v := range runs {
 		fmt.Println("i: ", i, ", s:", string(v))
 	}
+}
+
+func Scan_stu1() {
+	var (
+		confirm string
+	)
+	fmt.Print("do you want upgrade zdata?(Y/y/N/n) : ")
+	field, err := fmt.Scanln(&confirm)
+	if err != nil {
+		fmt.Println(err, field)
+		return
+	}
+
+	fmt.Printf("扫描结果 confirm:%s, field.len: %d\n", confirm, field)
 }

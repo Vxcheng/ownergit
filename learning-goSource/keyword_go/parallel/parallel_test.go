@@ -29,3 +29,9 @@ func TestRunPrimeNumer(t *testing.T) {
 		TryLock()
 	})
 }
+
+func TestChan(t *testing.T) {
+	t.Run("chan_stu3", func(t *testing.T) {
+		chan_stu3()
+	})
+}

@@ -88,3 +88,12 @@ func TestSlice(t *testing.T) {
 		fmt.Printf("%#v\n", b)
 	})
 }
+
+func TestIntervalSlice(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		s := []int{99}
+		for i := 0; i < 5; i++ {
+			s = IntervalSlice(s, i)
+		}
+	})
+}

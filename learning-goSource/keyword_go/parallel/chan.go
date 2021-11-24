@@ -1,6 +1,7 @@
 package parallel
 
 import (
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -94,6 +95,34 @@ func readFromChan(ch chan int, wg *sync.WaitGroup) {
 			log.Println("msg: ", msg)
 		case <-time.After(time.Second * 2):
 			return
+		}
+	}
+}
+
+func chan_stu3() {
+	aC, bC := make(chan int), make(chan interface{})
+	a, b := 1, "hi"
+	go func() {
+		for {
+			aC <- a
+			time.Sleep(time.Second)
+		}
+	}()
+	go func() {
+		for {
+			bC <- b
+			time.Sleep(time.Second)
+		}
+	}()
+
+	for {
+		select {
+		case v := <-aC:
+			fmt.Printf("%d\n", v)
+		case v := <-bC:
+			fmt.Printf("%v\n", v)
+		case <-time.After(time.Second):
+			fmt.Println("out")
 		}
 	}
 }

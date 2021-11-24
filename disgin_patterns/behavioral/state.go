@@ -84,3 +84,47 @@ func (f financeApproveState) GetName() string {
 func GetFinanceApproveState() IState {
 	return &financeApproveState{}
 }
+
+type state interface {
+	doAction(c *stateContext)
+	getValue() string
+}
+
+const (
+	start = "start"
+	stop  = "stop"
+)
+
+type startState struct{}
+
+func (s *startState) doAction(c *stateContext) {
+	fmt.Println("now start do something")
+	c.setState(s)
+}
+
+func (s *startState) getValue() string {
+	return start
+}
+
+type stopState struct{}
+
+func (s *stopState) doAction(c *stateContext) {
+	fmt.Println("now stop do something")
+	c.setState(s)
+}
+
+func (s *stopState) getValue() string {
+	return stop
+}
+
+type stateContext struct {
+	state
+}
+
+func (c *stateContext) getState() string {
+	return c.state.getValue()
+}
+
+func (c *stateContext) setState(state state) {
+	c.state = state
+}

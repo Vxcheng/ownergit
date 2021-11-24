@@ -18,3 +18,7 @@ func SortFloat64FastV2(a []float64) { // 通过 reflect.SliceHeader 更新切片
 	*cHdr = *aHdr // 以int方式给float64排序
 	sort.Ints(c)
 }
+
+func IntervalSlice(s []int, item int) []int {
+	return append(s, item)
+}
