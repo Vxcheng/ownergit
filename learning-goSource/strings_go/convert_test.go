@@ -174,3 +174,33 @@ func useMapPoint(dict map[string]*int) {
 func notUseMapPoint(dict map[string]int) {
 	dict["a"] = 1
 }
+
+func appendIgnoreCheckText(desc string) string {
+	r := []rune(desc)
+	if len(r) > 0 {
+		if string(r[len(r)-1]) == "。" {
+			tmp := r[:len(r)-1]
+			desc = string(append(tmp, []rune("，")...))
+		}
+		return fmt.Sprintf("%s忽略该检查。", desc)
+	} else {
+		return desc
+	}
+}
+
+func TestAppendIgnoreCheckText(t *testing.T) {
+	tests := []struct {
+		name string
+		desc string
+	}{
+		{desc: "Manager中配置。"},
+		{desc: "Manager中"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := appendIgnoreCheckText(tt.desc)
+			t.Log(got)
+		})
+	}
+}

@@ -47,3 +47,24 @@ func TestExp2(t *testing.T) {
 		})
 	}
 }
+
+func TestReplace(t *testing.T) {
+	tests := []struct {
+		value string
+	}{
+		{
+			value: `ONBOOT=yes\n
+			HOTPLUG=no`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run("ReplaceAllString", func(t *testing.T) {
+			re := regexp.MustCompile(`ONBOOT=(.*)\n+`)
+			values := re.FindStringSubmatch(tt.value)
+			outs := re.ReplaceAllString(tt.value, "ONBOOT=NO")
+			t.Log(outs, values)
+		})
+	}
+
+}

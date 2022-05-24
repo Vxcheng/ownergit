@@ -31,7 +31,7 @@ func BenchmarkSearch(b *testing.B) {
 
 func BenchmarkPrint(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		fmt.Sprintf("%d", 1)
+		_ = fmt.Sprintf("%d", i)
 	}
 }
 
