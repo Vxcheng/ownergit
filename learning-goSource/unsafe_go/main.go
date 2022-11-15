@@ -59,3 +59,38 @@ func unsafeFmt() {
 func float64bits(f float64) uint64 {
 	return *(*uint64)(unsafe.Pointer(&f))
 }
+
+func unsafeMap() {
+	mp := make(map[string]int)
+	mp["qcrao"] = 100
+	mp["stefno"] = 18
+
+	tmp := (**int)(unsafe.Pointer(&mp))
+	count := **tmp
+	fmt.Println(count, len(mp)) // 2 2
+}
+
+type Programmer struct {
+	name     string
+	age      int
+	language string
+}
+
+func unsafeStruct() {
+	p := Programmer{"stefno", 18, "go"}
+	fmt.Println(p)
+
+	tmp := uintptr(unsafe.Pointer(&p)) + unsafe.Sizeof(int(0)) + unsafe.Sizeof(string(""))
+	lang := (*string)(unsafe.Pointer(tmp))
+	*lang = "Golang"
+
+	fmt.Println(p)
+}
+
+//zero-copy
+func string2bytes(s string) []byte {
+	return *(*[]byte)(unsafe.Pointer(&s))
+}
+func bytes2string(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
