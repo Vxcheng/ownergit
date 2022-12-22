@@ -9,14 +9,15 @@ import (
 const (
 	ScanInterval = 2
 	layout       = "2006-01-02 15:04:05"
+	DateLayOut   = "2006-01-02"
 )
 
 func main() {
 	// covert()
 	// stu_Ticker()
 	// afterTimeOut()
-	timeSub()
-
+	// timeSub()
+	Since()
 	fmt.Println("finished.")
 }
 
@@ -100,4 +101,18 @@ func afterTimeOut() {
 	case <-time.After(time.Second * 2):
 		log.Println("time out")
 	}
+}
+
+func Since() (err error) {
+	str := "2022-12-07"
+	t1, _ := time.ParseInLocation(
+		DateLayOut,
+		str,
+		time.Local,
+	)
+
+	sub := time.Now().Sub(t1)
+	sin := time.Since(t1)
+	print(sub, sin)
+	return
 }
