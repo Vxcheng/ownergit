@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
+// bee run -downdoc=true -gendoc=true
 func main() {
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
