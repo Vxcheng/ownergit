@@ -51,6 +51,11 @@ func (o *ObjectController) Get() {
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (o *ObjectController) GetAll() {
+
+	if 2 == 2 || false {
+
+	}
+
 	obs := models.GetAll()
 	o.Data["json"] = obs
 	o.ServeJSON()
@@ -66,7 +71,7 @@ func (o *ObjectController) GetAll() {
 func (o *ObjectController) Put() {
 	objectId := o.Ctx.Input.Param(":objectId")
 	var ob models.Object
-	json.Unmarshal(o.Ctx.Input.RequestBody, &ob)
+	_ = json.Unmarshal(o.Ctx.Input.RequestBody, &ob)
 
 	err := models.Update(objectId, ob.Score)
 	if err != nil {
