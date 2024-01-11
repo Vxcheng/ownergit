@@ -1,0 +1,10 @@
+# github.com/panjf2000/ants/v2 v2.7.4
+## explicit
+github.com/panjf2000/ants/v2
+github.com/panjf2000/ants/v2/internal/sync
+# github.com/robfig/cron/v3 v3.0.0
+## explicit
+github.com/robfig/cron/v3
+# golang.org/x/time v0.3.0
+## explicit
+golang.org/x/time/rate

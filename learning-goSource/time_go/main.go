@@ -13,6 +13,8 @@ const (
 )
 
 func main() {
+	fmt.Println(time.Now().UnixMilli())
+
 	// covert()
 	// stu_Ticker()
 	// afterTimeOut()
