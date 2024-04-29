@@ -14,7 +14,7 @@ func demo1() {
 
 // go build -gcflags '-m -l' main.go
 func main() {
-	// demo1()
+	demo1()
 	demo2()
 }
 

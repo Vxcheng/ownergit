@@ -20,6 +20,7 @@ func BenchmarkDemo(b *testing.B) {
 func TestDemo(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		demo1()
+		Comp()
 	})
 }
 
