@@ -60,3 +60,16 @@ func partition(arr []int, low, high int) int {
 	// 返回基准元素的索引
 	return i + 1
 }
+
+// 插入排序
+func insertSort(arr []int) {
+	for i := 1; i < len(arr); i++ {
+		for j := i - 1; j >= 0 && arr[j] > arr[j+1]; j-- {
+			swap(arr, j, j+1)
+		}
+	}
+}
+
+func swap(arr []int, i, j int) {
+	arr[i], arr[j] = arr[j], arr[i]
+}

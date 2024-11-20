@@ -26,3 +26,9 @@ func TestQuickSort(t *testing.T) {
 	fmt.Println("13>>1 = ", 13>>1)
 	fmt.Println("排序后的数组：", arr)
 }
+
+func TestInsertSort(t *testing.T) {
+	arr := []int{10, 7, 8, 9, 1, 5}
+	insertSort(arr)
+	fmt.Println("排序后的数组：", arr)
+}
