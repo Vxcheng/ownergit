@@ -35,7 +35,14 @@ func TestGenerateFile(t *testing.T) {
 		}
 
 		for _, cc := range cases {
-			v := generateTemplateValue(cc.template)
+			rule := Rule{
+				Type:           cc.template.Type,
+				Decimal:        cc.template.Decimal,
+				Max:            cc.template.Max,
+				Min:            cc.template.Min,
+				RandomFloating: cc.template.RandomFloating,
+			}
+			v := generateTemplateValue(rule)
 			t.Log(v)
 		}
 	})
@@ -76,5 +83,10 @@ func TestGenerateFile(t *testing.T) {
 			fmt.Printf("Random integer: %d, Random float: %.2f\n", randomInt, randomFloat)
 
 		}
+	})
+
+	t.Run("count", func(t *testing.T) {
+		v := float64(1) / float64(5)
+		t.Log(v, v*100)
 	})
 }
