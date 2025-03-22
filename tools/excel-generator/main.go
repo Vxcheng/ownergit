@@ -27,6 +27,11 @@ var (
 )
 
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 	flag.Parse()
 	if *words != "" {
 		fmt.Println(joinWords(*words, *count, *sep))
@@ -65,10 +70,10 @@ func main() {
 
 // 配置文件结构
 type Config struct {
-	TemplatePath string `yaml:"template_path"` // 模板文件路径
-	OutputDir    string `yaml:"output_dir"`    // 输出目录
-	FileCount    int    `yaml:"file_count"`    // 生成文件数量
-	// FileMaxCount   int        `yaml:"file_max_count"`
+	TemplatePath   string     `yaml:"template_path"` // 模板文件路径
+	OutputDir      string     `yaml:"output_dir"`    // 输出目录
+	FileCount      int        `yaml:"file_count"`    // 生成文件数量
+	FileMaxCount   int        `yaml:"file_max_count"`
 	FileNumPattern string     `yaml:"file_num_pattern"`
 	SheetPoolSize  int        `yaml:"sheet_pool_size"`
 	FilePoolSize   int        `yaml:"file_pool_size"`
@@ -76,13 +81,14 @@ type Config struct {
 }
 
 type Template struct {
-	Pattern string         `yaml:"pattern"` // 正则表达式（如 "\$num"）
-	Type    string         `yaml:"type"`    // 数据类型: int/date/text
-	Min     float64        `yaml:"min,omitempty"`
-	Max     float64        `yaml:"max,omitempty"`
-	Options []string       `yaml:"options,omitempty"`
-	Decimal int            `yaml:"decimal,omitempty"` // 小数位数
-	Reg     *regexp.Regexp `yaml:"-"`
+	Pattern        string         `yaml:"pattern"` // 正则表达式（如 "\$num"）
+	Type           string         `yaml:"type"`    // 数据类型: int/date/text
+	Min            float64        `yaml:"min,omitempty"`
+	Max            float64        `yaml:"max,omitempty"`
+	RandomFloating float64        `yaml:"random_floating,omitempty"`
+	Options        []string       `yaml:"options,omitempty"`
+	Decimal        int            `yaml:"decimal,omitempty"` // 小数位数
+	Reg            *regexp.Regexp `yaml:"-"`
 }
 
 type ExcelizeFile struct {
@@ -163,13 +169,17 @@ func loadConfig(path string) (cfg *Config, err error) {
 }
 
 func (c *Config) initTemplates() (err error) {
-	for i := range c.Templates {
-		expr := strings.TrimSpace(c.Templates[i].Pattern)
+	for i, temp := range c.Templates {
+		expr := strings.TrimSpace(temp.Pattern)
 		expr = regexp.QuoteMeta(expr)
 		expr = fmt.Sprintf(`(%s)`, expr)
 		c.Templates[i].Reg, err = regexp.Compile(expr)
 		if err != nil {
-			return fmt.Errorf("parse template pattern(%s) error: %v", c.Templates[i].Pattern, err)
+			return fmt.Errorf("parse template pattern(%s) error: %v", temp.Pattern, err)
+		}
+
+		if temp.Max <= temp.Min {
+			return fmt.Errorf("template pattern(%s) max(%f) must be greater than min(%f)", temp.Pattern, temp.Max, temp.Min)
 		}
 	}
 
@@ -200,7 +210,7 @@ func generateFile(cfg *Config, fileNum int) (err error) {
 	defer f.Close()
 
 	// 计算序号位数（如 count=100 → 3位）
-	numWidth := len(strconv.Itoa(cfg.FileCount))
+	numWidth := len(strconv.Itoa(cfg.FileMaxCount))
 	fileNumStr := fmt.Sprintf("%0*d", numWidth, fileNum)
 
 	// 处理模板中的 @file_num 标记
@@ -251,6 +261,11 @@ func (f *ExcelizeFile) replaceTemplateStrings(cfg *Config, fileNumStr string) (e
 }
 
 func (f *ExcelizeFile) replaceSheet(sheet string, cfg *Config, fileNumStr string) (err error) {
+	defer func() {
+		if rec := recover(); rec != nil {
+			fmt.Println(rec)
+		}
+	}()
 	var match bool
 	var newText string
 	rows, err := f.GetRows(sheet)
@@ -323,11 +338,18 @@ func (f *ExcelizeFile) replaceTitle(sheet, pattern string, cellValue, numStr str
 
 // 生成替换值
 func generateTemplateValue(rule Template) (value string) {
+	max := rule.Max
+	min := rule.Min
+	if rule.RandomFloating > 0 {
+		min -= rule.RandomFloating
+		max += rule.RandomFloating
+	}
 	switch rule.Type {
 	case "int":
-		value = strconv.Itoa(rand.Intn(int(rule.Max-rule.Min)) + int(rule.Min))
+		v := rand.Intn(int(max-min)) + int(min)
+		value = strconv.Itoa(v)
 	case "float":
-		v := rand.Float64()*(rule.Max-rule.Min) + rule.Min
+		v := rand.Float64()*(max-min) + min
 		value = strconv.FormatFloat(v, 'f', rule.Decimal, 64)
 	case "text":
 		if len(rule.Options) > 0 {
