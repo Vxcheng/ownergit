@@ -8,6 +8,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/duke-git/lancet/v2/strutil"
 	"github.com/panjf2000/ants/v2"
 )
 
@@ -130,4 +131,10 @@ func demo3() {
 func taskFunc() {
 	time.Sleep(1 * time.Second) // 模拟耗时任务
 	fmt.Println("任务完成")
+}
+
+func demoUtil() {
+	s := "hello"
+	rs := strutil.Reverse(s)
+	fmt.Println(rs) //olleh
 }
