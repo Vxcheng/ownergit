@@ -87,7 +87,7 @@ func unsafeStruct() {
 	fmt.Println(p)
 }
 
-//zero-copy
+// zero-copy
 func string2bytes(s string) []byte {
 	return *(*[]byte)(unsafe.Pointer(&s))
 }

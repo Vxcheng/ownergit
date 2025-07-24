@@ -1,6 +1,10 @@
 package parallel
 
-import "testing"
+import (
+	"runtime"
+	"testing"
+	"time"
+)
 
 func TestProduceConsume(t *testing.T) {
 	t.Run("", func(t *testing.T) {
@@ -33,5 +37,13 @@ func TestRunPrimeNumer(t *testing.T) {
 func TestChan(t *testing.T) {
 	t.Run("chan_stu3", func(t *testing.T) {
 		chan_stu3()
+	})
+
+	t.Run("chan_stu4", func(t *testing.T) {
+		t.Log(runtime.NumGoroutine())
+		chan_stu4()
+		time.Sleep(time.Second)
+		runtime.GC()
+		t.Log(runtime.NumGoroutine())
 	})
 }

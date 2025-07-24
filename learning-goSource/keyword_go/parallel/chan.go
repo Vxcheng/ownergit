@@ -9,6 +9,7 @@ import (
 
 /*
 chan分类
+
 	无缓冲chan
 	有缓冲chan
 	单向chan
@@ -17,7 +18,7 @@ chan分类
 func Stu_chan() {
 	log.Println("学习chan")
 	// stu1_chan()
-	stu2_chan()
+	chan_stu4()
 	time.Sleep(time.Second)
 	log.Println("finished")
 
@@ -124,5 +125,57 @@ func chan_stu3() {
 		case <-time.After(time.Second):
 			fmt.Println("out")
 		}
+	}
+}
+
+func chan_stu4() {
+	dataC := make(chan int, 5)
+	go func() {
+		for {
+			v, closed := <-dataC
+			if closed {
+				log.Println("closed, exiting")
+				return
+			}
+
+			log.Printf("recieve: %d\n", v)
+		}
+	}()
+
+	for i := 0; i < 20; i++ {
+		dataC <- i
+		log.Printf("send: %d\n", i)
+
+	}
+
+	close(dataC)
+	log.Println("close dataC")
+	time.Sleep(time.Second * 2)
+}
+
+// 如何退出子协程
+func doBadthing(done chan bool) {
+	time.Sleep(time.Second)
+	done <- true
+}
+
+func timeout(f func(chan bool)) error {
+	done := make(chan bool) // bad, 协程泄漏，优化为	done := make(chan bool, 1)
+	go f(done)
+	select {
+	case <-done:
+		fmt.Println("done")
+		return nil
+	case <-time.After(time.Millisecond):
+		return fmt.Errorf("timeout")
+	}
+}
+
+func doGoodthing(done chan bool) {
+	time.Sleep(time.Second)
+	select {
+	case done <- true:
+	default:
+		return
 	}
 }

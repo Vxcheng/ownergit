@@ -8,7 +8,7 @@ import (
 
 func Stu_select() {
 	log.Println("学习select关键字")
-	stu5_select()
+	stu2_select()
 }
 
 // multiple channel
@@ -98,7 +98,7 @@ func stu2_select() {
 	ch := make(chan error)
 
 	go func(c chan error) {
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second * 2)
 		c <- fmt.Errorf("this is a err")
 	}(ch)
 
@@ -109,9 +109,13 @@ func stu2_select() {
 				log.Printf("err: %v\n", err)
 			}
 			log.Println("success")
-		case <-time.After(time.Second * 2):
+			return
+		case <-time.After(time.Second * 3):
 			log.Printf("2 second timeout\n")
+		default:
+			log.Println("default")
 		}
+		time.Sleep(time.Millisecond * 100)
 	}
 
 }
