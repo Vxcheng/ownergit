@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "echo";
+
+package echo;
+
+message Request {
+  string msg = 1;
+}
+
+message Response {
+  string msg = 1;
+}
+
+service EchoService {
+  rpc ClientSideStreaming(stream Request) returns (Response) {} // 客户端侧 streaming
+  rpc ServerSideStreaming(Request) returns (stream Response) {} // 服务端侧 streaming
+  rpc BidiSideStreaming(stream Request) returns (stream Response) {} // 双向流
+}
