@@ -132,8 +132,8 @@ func chan_stu4() {
 	dataC := make(chan int, 5)
 	go func() {
 		for {
-			v, closed := <-dataC
-			if closed {
+			v, ok := <-dataC
+			if !ok {
 				log.Println("closed, exiting")
 				return
 			}

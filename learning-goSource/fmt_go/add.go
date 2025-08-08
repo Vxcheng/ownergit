@@ -8,6 +8,12 @@ import (
 	"strings"
 )
 
+func main() {
+	fmt.Println("hello world")
+	// Scan_stu1()
+	// basic()
+}
+
 func Add(a, b uint64) uint64 {
 	return uint64(a + b)
 }
@@ -52,10 +58,6 @@ func promote() {
 		return
 	}
 	fmt.Printf("t_str: %s\n", string(buffT))
-}
-
-func main() {
-	Scan_stu1()
 }
 
 func basic() {
