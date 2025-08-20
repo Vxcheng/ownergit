@@ -10,3 +10,8 @@ func main() {
 
 //go:linkname callAssemblyFunction internal/assemblyFunction
 func callAssemblyFunction()
+
+//go:noinline
+func add(a, b int) int {
+	return a + b
+}
