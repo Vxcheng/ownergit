@@ -1,17 +1,40 @@
 // main.go
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+	"strconv"
+	"strings"
+)
 
 func main() {
-	fmt.Println("Calling assembly function...")
-	callAssemblyFunction()
+	println("Calling assembly function...")
+	if 1 > 2 {
+		println("no")
+	} else {
+		println("yes")
+	}
+
+	for i := 0; i < 2; i++ {
+		println(i)
+	}
+
+	println(GetGoid())
 }
 
-//go:linkname callAssemblyFunction internal/assemblyFunction
-func callAssemblyFunction()
+func GetGoid() int64 {
+	var (
+		buf [64]byte
+		n   = runtime.Stack(buf[:], false)
+		stk = strings.TrimPrefix(string(buf[:n]), "goroutine")
+	)
 
-//go:noinline
-func add(a, b int) int {
-	return a + b
+	idField := strings.Fields(stk)[0]
+	id, err := strconv.Atoi(idField)
+	if err != nil {
+		panic(fmt.Errorf("can not get goroutine id: %v", err))
+	}
+
+	return int64(id)
 }

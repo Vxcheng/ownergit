@@ -102,3 +102,13 @@ func netpoll(block bool) gList {
 * **Go V1.5的三色标记为什么需要屏障机制(“强-弱” 三色不变式、插入屏障、删除屏障 )**
 * **Go V1.8混合写屏障机制**
 * **Go V1.8混合写屏障机制的全场景分析**
+
+## 三、TCMalloc
+
+page->span->size Class
+
+ThreadCache->CentralCache->PageHeap，挂着FreeList
+
+tiny->page->mSpan->size Class(Object Size)
+
+MCache->MCentral->MHeap，绑定在P

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go WebSocket Test</title>
+</head>
+<body>
+    <h2>WebSocket Chat</h2>
+    <div>
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="output"></div>
+
+    <script>
+        // 1. 连接到服务器
+        const socket = new WebSocket('ws://localhost:8080/ws');
+        const output = document.getElementById('output');
+
+        // 2. 连接建立时的回调
+        socket.onopen = function(event) {
+            appendMessage('Connected to server.');
+        };
+
+        // 3. 收到服务器消息时的回调
+        socket.onmessage = function(event) {
+            appendMessage('Received: ' + event.data);
+        };
+
+        // 4. 连接关闭时的回调
+        socket.onclose = function(event) {
+            appendMessage('Disconnected from server.');
+        };
+
+        // 5. 发生错误时的回调
+        socket.onerror = function(error) {
+            console.error('WebSocket Error:', error);
+        };
+
+        // 发送消息的函数
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value;
+            if (message) {
+                socket.send(message);
+                appendMessage('Sent: ' + message);
+                input.value = ''; // 清空输入框
+            }
+        }
+
+        // 在页面上显示消息的辅助函数
+        function appendMessage(message) {
+            const p = document.createElement('p');
+            p.textContent = message;
+            output.appendChild(p);
+        }
+
+        // 允许按回车键发送
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
