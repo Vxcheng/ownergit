@@ -56,6 +56,11 @@ func main() {
 		// 发送文件内容
 		c.File(filePath)
 	})
+	r.GET("/hello", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello, World!",
+		})
+	})
 
 	// hello 接口
 	r.GET("/hello", func(c *gin.Context) {
@@ -65,5 +70,5 @@ func main() {
 	})
 
 	// 启动服务器
-	log.Fatal(r.Run(":8080"))
+	log.Fatal(r.Run(":8088"))
 }

@@ -1,7 +1,6 @@
 package slice
 
 import (
-	"fmt"
 	"os"
 	"testing"
 )
@@ -18,15 +17,14 @@ func BenchmarkDemo(b *testing.B) {
 }
 
 func TestDemo(t *testing.T) {
-	t.Run("", func(t *testing.T) {
+	t.Run("demo1", func(t *testing.T) {
 		demo1()
 		Comp()
 	})
-}
 
-func ExampleDemo() {
-	fmt.Println("hello")
-	// Output: hello
+	t.Run("demo2", func(t *testing.T) {
+		demo2()
+	})
 }
 
 func FuzzXxx(f *testing.F) {
