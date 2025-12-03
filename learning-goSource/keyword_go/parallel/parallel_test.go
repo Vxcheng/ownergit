@@ -35,6 +35,22 @@ func TestRunPrimeNumer(t *testing.T) {
 }
 
 func TestChan(t *testing.T) {
+	t.Run("base", func(t *testing.T) {
+		ch := make(chan int)
+		go func() {
+			ch <- 1
+		}()
+		print(<-ch)
+
+	})
+
+	t.Run("base buffer", func(t *testing.T) {
+		ch := make(chan int, 1)
+		ch <- 1
+		print(<-ch)
+		close(ch)
+
+	})
 	t.Run("chan_stu3", func(t *testing.T) {
 		chan_stu3()
 	})

@@ -8,4 +8,4 @@ void _cgo_allocate(void *a __attribute__((unused)), int c __attribute__((unused)
 void _cgo_panic(void *a __attribute__((unused)), int c __attribute__((unused))) { }
 void _cgo_reginit(void) { }
 #line 1 "cgo-generated-wrappers"
-void _cgoexp_074f26859387_sum(void* p){}
+void _cgoexp_074f26859387_sum(void* p __attribute__((unused))){}

@@ -21,7 +21,7 @@ static size_t _GoStringLen(_GoString_ s) { return (size_t)s.n; }
 __attribute__ ((unused))
 static const char *_GoStringPtr(_GoString_ s) { return s.p; }
 
-#line 3 "/home/liocheng/Install/go_path/src/ownergit/advance/cgo/demo1/main.go"
+#line 3 "/home/liocheng/Install/go_path/src/ownergit/advance/cgo/go_2_c/main.go"
 int sum(int a, int b) { return a+b; }
 
 #line 1 "cgo-generated-wrapper"

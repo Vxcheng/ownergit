@@ -10,4 +10,8 @@ func TestMap(t *testing.T) {
 	t.Run("demo2", func(t *testing.T) {
 		demo2()
 	})
+
+	t.Run("demo3", func(t *testing.T) {
+		demo3()
+	})
 }

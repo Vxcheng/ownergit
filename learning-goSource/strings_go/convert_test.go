@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"unicode/utf8"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -244,4 +245,67 @@ func byteConcat(n int, str string) string {
 		buf = append(buf, str...)
 	}
 	return string(buf)
+}
+
+// BenchmarkReverseString 反转字符串函数的性能基准测试
+func TestReverseString(t *testing.T) {
+	// 测试字符串
+	t.Run("D1", func(t *testing.T) {
+		// 测试字符串
+		testString := "Hello, 世界! "
+		t.Log(reverseString(testString))
+	})
+
+	t.Run("D2", func(t *testing.T) {
+		// string -> []byte
+		s := "Hello, 世界"
+		byteSlice := []byte(s)
+		fmt.Printf("string -> []byte: %v\n", byteSlice)
+		// 输出: [72 101 108 108 111 44 32 228 184 150 231 149 140]
+
+		// []byte -> string
+		byteData := []byte{72, 101, 108, 108, 111}
+		strFromBytes := string(byteData)
+		fmt.Printf("[]byte -> string: %s\n", strFromBytes)
+		// 输出: Hello
+
+	})
+
+	t.Run("D3", func(t *testing.T) {
+
+		// string -> []rune
+		s := "Hello, 世界"
+		runeSlice := []rune(s)
+		fmt.Printf("string -> []rune: %v\n", runeSlice)
+		// 输出: [72 101 108 108 111 44 32 19990 30028]
+
+		// []rune -> string
+		runes := []rune{'H', 'e', 'l', 'l', 'o', ' ', '世', '界'}
+		strFromRunes := string(runes)
+		fmt.Printf("[]rune -> string: %s\n", strFromRunes)
+		// 输出: Hello 世界
+	})
+
+	t.Run("D4", func(t *testing.T) {
+		// byte -> rune (ASCII字符)
+		b := byte('A')
+		r := rune(b)
+		fmt.Printf("byte '%c' -> rune: %U\n", b, r)
+		// 输出: byte 'A' -> rune: U+0041
+
+		// rune -> byte (仅限于ASCII字符)
+		r2 := rune('B')
+		b2 := byte(r2) // 注意：如果rune值超过255会丢失数据
+		fmt.Printf("rune %U -> byte: %c\n", r2, b2)
+		// 输出: rune U+0042 -> byte: B
+
+	})
+
+	t.Run("D5", func(t *testing.T) {
+		s := "Hello世界"
+
+		fmt.Printf("字节长度: %d\n", len(s))                    // 输出: 11
+		fmt.Printf("字符长度: %d\n", utf8.RuneCountInString(s)) // 输出: 7
+		fmt.Printf("rune切片长度: %d\n", len([]rune(s)))        // 输出: 7
+	})
 }

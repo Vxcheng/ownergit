@@ -57,6 +57,13 @@ func main() {
 		c.File(filePath)
 	})
 
+	// hello 接口
+	r.GET("/hello", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello, World!",
+		})
+	})
+
 	// 启动服务器
 	log.Fatal(r.Run(":8080"))
 }

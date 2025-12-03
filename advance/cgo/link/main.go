@@ -11,6 +11,7 @@ import "fmt"
 $ cd ./number
 $ gcc -c -o number.o number.c
 $ ar rcs libnumber.a number.o
+$ gcc -shared -o libnumber.so number.c
 */
 func main() {
 	fmt.Println(C.number_add_mod(10, 5, 12))

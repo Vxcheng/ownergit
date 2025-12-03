@@ -20,6 +20,18 @@
 
 《Golang修养之路》 https://www.yuque.com/aceld/golang/ithv8f
 
+《幼麟实验室》https://space.bilibili.com/567195437/lists
+
+《Go 程序员面试笔试宝典》https://github.com/golang-design/Go-Questions
+
+《GO 夜读》https://space.bilibili.com/326749661/lists
+
+
+## 博客
+
+https://github.com/gopherchina
+
+
 # Go 进阶
 
 1. 内存逃逸
@@ -112,3 +124,14 @@ ThreadCache->CentralCache->PageHeap，挂着FreeList
 tiny->page->mSpan->size Class(Object Size)
 
 MCache->MCentral->MHeap，绑定在P
+
+## 四、map
+
+总结：演变历程一览表
+时期	核心实现	主要优化/解决的问题	遗留/引入的问题
+Go 1.0 ~ 1.7	经典链式哈希表	实现简单	1. 内存碎片，缓存不友好
+2. 易受哈希碰撞攻击
+Go 1.8 ~ 1.17	优化内存布局 + 溢出桶管理	1. Key/Value 分离（省内存，利GC）
+2. 溢出桶统一管理（改善局部性）
+3. 哈希种子随机化（防攻击）	并发读写 panic 信息不易调试
+Go 1.18+	底层算法不变	并发检测提前：更早、更清晰地 panic，易于调试	Map 本身依然非并发安全

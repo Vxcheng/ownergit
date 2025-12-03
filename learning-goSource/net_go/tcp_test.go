@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestTcpServer(t *testing.T)  {
+func TestTcpServer(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		go tcpServer()
 		select {
@@ -14,11 +14,10 @@ func TestTcpServer(t *testing.T)  {
 	})
 }
 
-func TestTcpClient(t *testing.T)  {
+func TestTcpClient(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		go tcpClient()
-		select {
-		}
+		select {}
 	})
 }
 
@@ -28,19 +27,19 @@ func tcpServer() {
 		fmt.Println("服务器连接失败")
 		return
 	}
-	
+
 	defer listen_socket.Close() //延迟服务器端关闭
 	fmt.Println("服务器运行中....")
-	
+
 	for {
 		conn, err := listen_socket.Accept() //监听客户端的端口
 		if err != nil {
 			fmt.Println("客户端开始失败")
 		}
 		fmt.Println("连接服务器成功") //显示服务器端连接成功
-		
+
 		var msg string //声明msg为字符串变量
-		
+
 		for {
 			//开始接收客户端发过来的消息
 			msg = ""                         //字符串msg初始为空
@@ -49,7 +48,7 @@ func tcpServer() {
 			if msg_read == 0 || err != nil { //如果读取的消息为0字节或者有错误
 				fmt.Println("err")
 			}
-			
+
 			msg_read_str := string(data[0:msg_read]) //将msg_read_str的字节格式转化成字符串形式
 			if msg_read_str == "close" {             //如果接收到的客户端消息为close
 				conn.Write([]byte("close"))
@@ -57,9 +56,9 @@ func tcpServer() {
 			}
 			//fmt.Println(string(data[0:msg_read]))
 			fmt.Println("客户端给服务器发送消息 ", msg_read_str) //接收客户端发来的信息
-			
+
 			fmt.Printf("对客户端发送消息: ") //提示向客户端要说的话
-			fmt.Scan(&msg)                //输入服务器端要对客户端说的话
+			fmt.Scan(&msg)           //输入服务器端要对客户端说的话
 			//conn.Write([]byte("hello client\n"))
 			//msg_write := []byte(msg)
 			conn.Write([]byte(msg)) //把消息发送给客户端
@@ -78,9 +77,9 @@ func tcpClient() {
 	}
 	defer conn.Close()
 	fmt.Println("连接成功")
-	
+
 	var msg string //声明msg为字符串变量
-	
+
 	for {
 		msg = "" //初始化msg为空值
 		fmt.Printf("给服务器发送消息: ")
@@ -91,7 +90,7 @@ func tcpClient() {
 		conn.Write([]byte(msg)) //信息转化成字节流形式并向服务器端发送
 		//此处造成客户端程序端口堵塞
 		//fmt.Println([]byte(msg))
-		
+
 		//等待服务器端发送信息回来
 		data := make([]byte, 255)
 		msg_read, err := conn.Read(data)
@@ -103,7 +102,7 @@ func tcpClient() {
 			conn.Write([]byte("close"))
 			break
 		}
-		
+
 		fmt.Println("服务器回应:", msg_read_str)
 	}
 	conn.Close()
