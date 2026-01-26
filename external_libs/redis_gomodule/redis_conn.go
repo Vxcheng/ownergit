@@ -13,7 +13,7 @@ const (
 	Timeout            = 30
 )
 
-//redis 连接需要的配置信息
+// redis 连接需要的配置信息
 type ConfigST struct {
 	User string `json:"User" yaml:"User"`
 	Pw   string `json:"Pw" yaml:"Pw"`
@@ -31,7 +31,7 @@ func InitRedis(cfg ConfigST) error {
 		Wait:        true,
 		Dial: func() (redis.Conn, error) {
 			con, err := redis.Dial("tcp", cfg.Host,
-				redis.DialPassword(cfg.Pw),
+				// redis.DialPassword(cfg.Pw),
 				redis.DialDatabase(cfg.Db),
 				redis.DialConnectTimeout(Timeout*time.Second),
 				redis.DialReadTimeout(Timeout*time.Second),
