@@ -3,7 +3,7 @@
 基础语法	《Go 语言圣经》、A Tour of Go
 并发编程	《Go 并发编程实战》、GMP 调度解析1
 性能优化	《深入理解 Go 语言》、GC 三色标记5
-微服务架构	Kratos、Go-zero、gRPC 实践9
+微服务架构	 KiteX、Kratos、Go-zero、gRPC 实践9
 开源贡献	参与 Etcd、TiKV、Dtm 等项目的 Issue/PR
 
 《Mastering Go》 https://github.com/hantmac/Mastering_Go_ZH_CN
@@ -26,11 +26,9 @@
 
 《GO 夜读》https://space.bilibili.com/326749661/lists
 
-
 ## 博客
 
 https://github.com/gopherchina
-
 
 # Go 进阶
 

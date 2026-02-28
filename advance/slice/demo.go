@@ -2,6 +2,7 @@ package slice
 
 import "fmt"
 
+// slice 底层数组，共享底层数组
 func demo1() {
 	var sl = []int{1, 2, 3, 4, 5, 6, 7, 8}
 	var parr = (*[7]int)(sl)

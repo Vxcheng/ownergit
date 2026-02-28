@@ -19,7 +19,6 @@ func BenchmarkDemo(b *testing.B) {
 func TestDemo(t *testing.T) {
 	t.Run("demo1", func(t *testing.T) {
 		demo1()
-		Comp()
 	})
 
 	t.Run("demo2", func(t *testing.T) {
