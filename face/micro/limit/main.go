@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -11,7 +12,9 @@ import (
 func main() {
 	// main_count()
 	// main_token()
-	main_limiter()
+	// main_limiter()
+	// main_sliding()
+	main_redis_limit()
 }
 
 // FixedWindowLimiter 实现了固定窗口算法的限流器
@@ -158,4 +161,148 @@ func main_limiter() {
 	}
 	time.Sleep(1 * time.Second)
 	fmt.Println("总通过请求数:", count)
+}
+
+// SlidingWindowLog 基于时间戳队列的精确滑动窗口限流器
+//
+// 原理：用一个大小为 limit 的循环队列记录每个通过请求的时间戳。
+// 每次 Allow 时，先丢弃队列中早于 (now - window) 的旧时间戳，
+// 再判断剩余数量是否已达上限。精确但内存占用与 limit 成正比。
+type SlidingWindowLog struct {
+	limit      int           // 窗口内最大请求数
+	window     int64         // 窗口大小（纳秒）
+	timestamps []int64       // 循环队列，存储各请求时间戳（UnixNano）
+	head       int           // 队列头（最旧元素）索引
+	count      int           // 当前窗口内有效请求数
+	mu         sync.Mutex
+}
+
+func NewSlidingWindowLog(limit int, window time.Duration) *SlidingWindowLog {
+	return &SlidingWindowLog{
+		limit:      limit,
+		window:     window.Nanoseconds(),
+		timestamps: make([]int64, limit),
+	}
+}
+
+func (l *SlidingWindowLog) Allow() bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	now := time.Now().UnixNano()
+	cutoff := now - l.window
+
+	// 移除窗口外的过期时间戳
+	for l.count > 0 && l.timestamps[l.head] <= cutoff {
+		l.head = (l.head + 1) % l.limit
+		l.count--
+	}
+
+	if l.count >= l.limit {
+		return false
+	}
+
+	// 写入本次请求时间戳
+	tail := (l.head + l.count) % l.limit
+	l.timestamps[tail] = now
+	l.count++
+	return true
+}
+
+// SlidingWindowCounter 基于计数器加权的近似滑动窗口限流器
+//
+// 原理：同时维护"当前窗口"和"上一个窗口"的计数器。
+// 估算值 = prevCount × (窗口剩余比例) + curCount
+// 这是 Redis + Nginx 常用的近似方案，内存占用固定，误差 < 1/limit。
+type SlidingWindowCounter struct {
+	limit     int64
+	window    int64 // 窗口大小（纳秒）
+	curCount  int64
+	prevCount int64
+	curWindow int64 // 当前窗口起始时间（纳秒）
+	mu        sync.Mutex
+}
+
+func NewSlidingWindowCounter(limit int64, window time.Duration) *SlidingWindowCounter {
+	return &SlidingWindowCounter{
+		limit:     limit,
+		window:    window.Nanoseconds(),
+		curWindow: time.Now().UnixNano(),
+	}
+}
+
+func (l *SlidingWindowCounter) Allow() bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	now := time.Now().UnixNano()
+	elapsed := now - l.curWindow
+
+	if elapsed >= l.window*2 {
+		// 两个窗口均已过期，直接归零
+		l.prevCount = 0
+		l.curCount = 0
+		l.curWindow = now
+		elapsed = 0
+	} else if elapsed >= l.window {
+		// 当前窗口到期，向前滑动一格
+		l.prevCount = l.curCount
+		l.curCount = 0
+		l.curWindow += l.window
+		elapsed = now - l.curWindow
+	}
+
+	// 上个窗口在当前滑动窗口内的加权贡献
+	ratio := float64(l.window-elapsed) / float64(l.window)
+	estimate := float64(l.prevCount)*ratio + float64(l.curCount)
+
+	if int64(estimate) >= l.limit {
+		return false
+	}
+
+	l.curCount++
+	return true
+}
+
+func main_sliding() {
+	const limit = 5
+	window := time.Second
+
+	fmt.Println("=== 精确滑动窗口（Log）===")
+	log := NewSlidingWindowLog(limit, window)
+	for i := 1; i <= 8; i++ {
+		if log.Allow() {
+			fmt.Printf("请求 %d: ✅ 通过\n", i)
+		} else {
+			fmt.Printf("请求 %d: ❌ 限流\n", i)
+		}
+	}
+	fmt.Println("--- 等待 600ms ---")
+	time.Sleep(600 * time.Millisecond)
+	for i := 9; i <= 12; i++ {
+		if log.Allow() {
+			fmt.Printf("请求 %d: ✅ 通过\n", i)
+		} else {
+			fmt.Printf("请求 %d: ❌ 限流\n", i)
+		}
+	}
+
+	fmt.Println("\n=== 近似滑动窗口（Counter）===")
+	counter := NewSlidingWindowCounter(limit, window)
+	for i := 1; i <= 8; i++ {
+		if counter.Allow() {
+			fmt.Printf("请求 %d: ✅ 通过\n", i)
+		} else {
+			fmt.Printf("请求 %d: ❌ 限流\n", i)
+		}
+	}
+	fmt.Println("--- 等待 600ms ---")
+	time.Sleep(600 * time.Millisecond)
+	for i := 9; i <= 12; i++ {
+		if counter.Allow() {
+			fmt.Printf("请求 %d: ✅ 通过\n", i)
+		} else {
+			fmt.Printf("请求 %d: ❌ 限流\n", i)
+		}
+	}
 }

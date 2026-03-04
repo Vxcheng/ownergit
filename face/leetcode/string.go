@@ -1,6 +1,7 @@
 package leetcode
 
 import (
+	"sort"
 	"strings"
 	"sync"
 )
@@ -86,4 +87,25 @@ func para() {
 	wg.Wait()
 	print("len: ", len(vec))
 	return
+}
+
+func groupAnagrams(strs []string) [][]string {
+	var res [][]string
+	diffM := make(map[string][]string)
+	for _, ss := range strs {
+		bytes := []byte(ss)
+		sort.Slice(bytes, func(i, j int) bool {
+			return bytes[i] < bytes[j]
+		})
+
+		unique := string(bytes)
+		// 记录到diffM，比较其它元素，更新到diffM
+		diffM[unique] = append(diffM[unique], ss)
+	}
+
+	for _, ss := range diffM {
+		res = append(res, ss)
+	}
+
+	return res
 }
