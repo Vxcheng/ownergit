@@ -109,3 +109,9 @@ func groupAnagrams(strs []string) [][]string {
 
 	return res
 }
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
