@@ -2,6 +2,12 @@ package leetcode
 
 import "container/list"
 
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
 // 使用container/list实现层序遍历，计算每层的节点值之和
 func levelSumWithList(root *TreeNode) []int {
 	if root == nil {

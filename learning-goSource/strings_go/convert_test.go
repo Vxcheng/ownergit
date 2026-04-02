@@ -302,10 +302,33 @@ func TestReverseString(t *testing.T) {
 	})
 
 	t.Run("D5", func(t *testing.T) {
-		s := "Hello世界"
+		/*
+		   一句话总结：Go 的字符串是 UTF-8 编码的只读字节切片，处理 ASCII 用 byte，处理多语言用 rune，
+		   遍历用 for range，截取先转 []rune。
+
+		*/
+
+		s := "Hello 世界"
 
 		fmt.Printf("字节长度: %d\n", len(s))                    // 输出: 11
 		fmt.Printf("字符长度: %d\n", utf8.RuneCountInString(s)) // 输出: 7
 		fmt.Printf("rune切片长度: %d\n", len([]rune(s)))        // 输出: 7
+
+		// string 底层是只读的字节数组
+		fmt.Printf("string 长度（字节数）: %d\n", len(s))       // 12
+		fmt.Printf("rune 数量（字符数）: %d\n", len([]rune(s))) // 8
+		fmt.Printf("byte 数组: %v\n", []byte(s))           // [72 101 108 108 111 32 228 184 150 231 149 140]
+		for i := 0; i < len(s); i++ {
+			fmt.Printf("s[%d]: %c %v %v\n", i, s[i], rune(s[i]), byte(s[i])) // 输出每个字节的字符
+		}
+
+		for i, v := range s {
+			fmt.Printf("utf s[%d]: %v %c %v\n", i, v, s[i], rune(s[i])) // 输出每个字节的字符
+		}
+
+		for i, v := range []rune(s) {
+			fmt.Printf("rune s[%d]: %c %c %v\n", i, v, s[i], rune(s[i])) // 输出每个字符的索引和字符
+		}
 	})
+
 }
