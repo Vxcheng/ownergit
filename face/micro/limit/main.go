@@ -169,11 +169,11 @@ func main_limiter() {
 // 每次 Allow 时，先丢弃队列中早于 (now - window) 的旧时间戳，
 // 再判断剩余数量是否已达上限。精确但内存占用与 limit 成正比。
 type SlidingWindowLog struct {
-	limit      int           // 窗口内最大请求数
-	window     int64         // 窗口大小（纳秒）
-	timestamps []int64       // 循环队列，存储各请求时间戳（UnixNano）
-	head       int           // 队列头（最旧元素）索引
-	count      int           // 当前窗口内有效请求数
+	limit      int     // 窗口内最大请求数
+	window     int64   // 窗口大小（纳秒）
+	timestamps []int64 // 循环队列，存储各请求时间戳（UnixNano）
+	head       int     // 队列头（最旧元素）索引
+	count      int     // 当前窗口内有效请求数
 	mu         sync.Mutex
 }
 
