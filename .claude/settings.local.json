@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(ls:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(cmd:*)",
+      "Bash(powershell:*)",
+      "Bash(go test:*)",
+      "Bash(go build:*)",
+      "Bash(printf hello world\\\\n:*)",
+      "Bash(go version:*)"
     ]
   }
 }

@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-// LRUCache 带过期时间的LRU缓存
+// LRUCache 带过期时间的LRU缓存，淘汰最久未使用的
 type LRUCache struct {
-	capacity int
+	capacity int // 最大容量
 	mu       sync.RWMutex
 	cache    map[interface{}]*list.Element // 快速查找
 	lruList  *list.List                    // LRU双向链表
