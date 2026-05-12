@@ -683,6 +683,8 @@ openspec、superpower
 
 ![1776148158284](image/skills/1776148158284.png)
 
+![1778294954774](image/skills/1778294954774.png)
+
 #### d. 测试
 
 tdd、playwright、chrome-devtool
