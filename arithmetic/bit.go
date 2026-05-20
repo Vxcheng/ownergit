@@ -69,3 +69,56 @@ func BitDemo() {
 	clearFlag := newFlag &^ mask                        // 等价于 newFlag & ^mask
 	fmt.Printf("清除特定位: %b -> %b\n", newFlag, clearFlag) // 1100 -> 1000
 }
+
+type Number struct {
+	dec  int8
+	orig string // 原码
+	rev  string // 反码
+	comp string // 补码
+}
+
+func computeCodes(n int8) Number {
+	u := uint8(n)   // 将 int8 直接转换为 uint8，用于获取负数的二进制补码表示
+	abs := uint8(n) // 初始绝对值取值为 n 的无符号形式
+	if n < 0 {
+		abs = uint8(-n) // 负数时取其绝对值的无符号表示
+	}
+
+	// 原码
+	signBit := uint8(0) // 先假定符号位为 0
+	if n < 0 {
+		signBit = 1 << 7 // 负数时设置最高位为 1
+	}
+	orig := signBit | (abs & 0x7F) // 将符号位与数值部分组合成原码，abs & 0x7F 的作用是清除最高位（符号位），只保留低 7 位数值
+
+	// 反码
+	var revCode uint8
+	if n >= 0 {
+		revCode = orig // 正数反码与原码相同
+	} else {
+		revCode = (^orig) & 0xFF // 负数反码为原码按位取反，截取 8 位，可能有问题
+	}
+
+	// 补码
+	var compCode uint8
+	if n >= 0 {
+		compCode = orig // 正数补码与原码相同
+	} else {
+		compCode = u // 负数补码直接使用 uint8 转换后的值
+	}
+
+	return Number{
+		dec:  n,                             // 保存原始十进制值
+		orig: fmt.Sprintf("%08b", orig),     // 格式化为 8 位原码字符串
+		rev:  fmt.Sprintf("%08b", revCode),  // 格式化为 8 位反码字符串
+		comp: fmt.Sprintf("%08b", compCode), // 格式化为 8 位补码字符串
+	}
+}
+
+func Complement() {
+	fmt.Println("十进制 → 原码 → 反码 → 补码")
+	for i := int8(-7); i <= 7; i++ {
+		n := computeCodes(i)
+		fmt.Printf("%3d → %s → %s → %s\n", n.dec, n.orig, n.rev, n.comp)
+	}
+}

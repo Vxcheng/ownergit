@@ -44,7 +44,7 @@ func TestXxx(t *testing.T) {
 	t.Run("Shift Right", func(t *testing.T) {
 		v := 5 >> 1
 		fmt.Printf("%v, %08b \n", v, v)
-		v = -5 >> 1 
+		v = -5 >> 1
 		fmt.Printf("%v, %08b \n", v, v)
 	})
 
@@ -77,5 +77,9 @@ func TestXxx(t *testing.T) {
 
 	t.Run("BitDemo", func(t *testing.T) {
 		BitDemo()
+	})
+
+	t.Run("Complement", func(t *testing.T) {
+		Complement()
 	})
 }

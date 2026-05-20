@@ -310,9 +310,9 @@ func TestReverseString(t *testing.T) {
 
 		s := "Hello 世界"
 
-		fmt.Printf("字节长度: %d\n", len(s))                    // 输出: 11
-		fmt.Printf("字符长度: %d\n", utf8.RuneCountInString(s)) // 输出: 7
-		fmt.Printf("rune切片长度: %d\n", len([]rune(s)))        // 输出: 7
+		fmt.Printf("字节长度: %d\n", len(s))                    // 输出: 12
+		fmt.Printf("字符长度: %d\n", utf8.RuneCountInString(s)) // 输出: 8
+		fmt.Printf("rune切片长度: %d\n", len([]rune(s)))        // 输出: 8
 
 		// string 底层是只读的字节数组
 		fmt.Printf("string 长度（字节数）: %d\n", len(s))       // 12
