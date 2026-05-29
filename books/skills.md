@@ -191,9 +191,120 @@ oracle Rac+ADG
 
 ### IO Hang
 
-![1775460540573](image/skills/1775460540573.png)
+ 我来分析这些 NVMe 参数在 IO hang 场景下的作用链路和解决的问题。
 
-![1775460544894](image/skills/1775460544894.png)
+  参数作用分析
+
+1. nvme connect 参数
+
+  -k 5 (keep_alive_tmo=5秒)
+
+- 作用: NVMe 主机每 5 秒向控制器发送一次 Keep-Alive 命令
+- 链路: 主机定期探测控制器是否存活
+- 目的: 快速检测控制器故障或网络中断
+
+ -l 15 (ctrl_loss_tmo=15秒)
+
+- 作用: 控制器丢失后，15秒内必须重连成功，否则放弃
+- 链路: keep_alive 超时 → 触发重连 → 15 秒内未恢复 → 删除控制器
+- 目的: 快速失败，避免长时间 hang 住
+
+ -c 1 (reconnect_delay=1秒)
+
+- 作用: 重连尝试之间的间隔时间
+- 链路: 首次重连失败 → 等待 1 秒 → 再次尝试
+- 目的: 避免频繁重连造成资源浪费
+
+  -i 8 (nr_io_queues=8)
+- 作用: 创建 8 个 IO 队列
+- 链路: 多队列并行处理 IO 请求
+- 目的: 提高并发性能，减少队列拥塞
+
+2. nvme_core 模块参数
+
+  max_retries=1
+
+- 作用: IO 命令失败后最多重试 1 次
+- 链路: IO 失败 → 重试 1 次 → 仍失败则返回错误
+- 目的: 快速失败，避免无限重试导致 hang
+
+  io_timeout=5
+- 作用: 单个 IO 命令的超时时间为 5 秒
+- 链路: IO 下发 → 5 秒内无响应 → 触发超时处理
+- 目的: 防止 IO 永久 hang
+
+  作用链路图
+
+  IO 请求下发
+  ↓
+  [io_timeout=5s] 计时开始
+  ↓
+  5s 内无响应？
+  ↓ 是
+  IO 超时 → [max_retries=1] 重试 1 次
+  ↓ 仍失败
+  触发错误处理
+  ↓
+  同时，后台 Keep-Alive 机制：
+  ↓
+  [keep_alive_tmo=5s] 每 5 秒探测控制器
+  ↓
+  探测失败？
+  ↓ 是
+  触发重连机制
+  ↓
+  [ctrl_loss_tmo=15s] 15 秒内必须重连成功
+  ↓ 失败
+  删除控制器，所有 IO 返回错误
+  ↓
+  [reconnect_delay=1s] 等待 1秒后再次尝试
+
+  解决的问题
+
+1. 快速故障检测
+
+- keep_alive_tmo=5s: 5 秒内检测到控制器故障
+- 传统方案可能需要 30-60 秒才能检测到
+
+2. 快速故障恢复或失败
+
+- ctrl_loss_tmo=15s: 15 秒内决定是恢复还是放弃
+- 避免应用层长时间等待（传统可能 hang 数分钟）
+
+3. 防止 IO 永久 hang
+
+- io_timeout=5s + max_retries=1: 最多 10 秒（5s × 2）后 IO 必定返回
+- 避免进程进入 D 状态（不可中断睡眠）
+
+4. 避免雪崩效应
+
+- max_retries=1: 限制重试次数，防止大量重试占用资源
+- reconnect_delay=1s: 避免频繁重连加剧系统负载
+
+  典型场景示例
+
+● 场景：NVMe-oF 存储网络中断
+
+  T=0s:    网络中断，IO 请求无法到达存储
+  T=5s:    io_timeout 触发，IO 重试（max_retries=1）
+  T=5s:    keep_alive 超时，检测到控制器失败
+  T=5s:    触发重连机制
+  T=6s:    ctrl_loss_tmo=15s 到期，重连失败
+  T=6s:    删除控制器，所有 pending IO 返回 -EIO
+  T=10s:   第一次 IO 重试也超时，最终返回错误给应用
+  T=21s:   reconnect_delay=1s 后再次尝试重连
+
+  对比传统配置（keep_alive=30s, ctrl_loss_tmo=600s, io_timeout=30s）：
+
+- 传统方案：可能需要 30-60 秒才检测到故障，IO hang 时间更长
+- 优化方案：6-10 秒内应用就能收到错误，可以快速切换到备用路径
+
+  适用场景
+
+  这套参数适合：
+- 高可用架构：有多路径或备用存储
+- 对延迟敏感：不能容忍长时间 hang
+- 快速故障转移：需要秒级切换
 
 ![1775786837121](image/skills/1775786837121.png)
 
@@ -522,11 +633,11 @@ func (s *sharedIndexInformer) HandleDeltas(obj interface{}) error {
 
 ## 官方库
 
-https://github.com/kubernetes/kubernetes
+https://github.com/kubernetes/kubernetes   主仓库
 
-https://github.com/kubernetes/client-go
+https://github.com/kubernetes/client-go  访问 API ，SDK
 
-https://github.com/kubernetes-sigs/controller-runtime
+https://github.com/kubernetes-sigs/controller-runtime  构建**Kubernetes 控制器**和**Operator**
 
 ## Operator
 
@@ -557,6 +668,8 @@ Operator 的工作原理，实际上是利用了 Kubernetes 的自定义 API 资
 cr_dd16f4dcbdc764589d4066c9aa869ceba9c26cc41ee85a517a4558da6f2bae55 程
 cr_2bca7702d59cb8f5382939a880895f29964947f512419df6d617083943920b60 罗
 
+![1780022021296](image/skills/1780022021296.png)
+
 ![1774519419226](image/skills/1774519419226.png)
 
 ![1773299664628](image/skills/1773299664628.png)
@@ -574,7 +687,7 @@ cr_2bca7702d59cb8f5382939a880895f29964947f512419df6d617083943920b60 罗
 
 #### a.项目架构
 
-/init 生成.claude/CLAUDE.MD。包含项目核心架构图、核心业务及源码链路及核心命令、打包部署、优秀设计点、核心技术栈等。多用UML图表示
+/init 生成CLAUDE.MD。用中文，包含项目核心架构图、核心业务及源码链路及核心命令、打包部署、优秀设计点、核心技术栈等。多用UML图表示
 
 claude --dangerously-skip-permissions
 claude --permission-mode bypassPermissions

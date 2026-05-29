@@ -1,4 +1,4 @@
-package main
+package linked_list
 
 // 1. 反转位置m-n的单链表，请使用一趟扫描完成反转
 // 例： 1->2->3->4->5  reverse: 1->4->3->2->5

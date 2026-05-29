@@ -154,8 +154,8 @@ func (c *LRUCache) cleanExpiredOnce() {
 
 	now := time.Now()
 	for elem := c.lruList.Back(); elem != nil; {
-		next := elem.Prev() // 先保存前一个，因为可能删除当前
-		item := elem.Value.(*cacheItem)
+		next := elem.Prev()             // 先保存前一个，因为可能删除当前
+		item := elem.Value.(*cacheItem) // 获取缓存项,检查过期
 		if !item.expireTime.IsZero() && now.After(item.expireTime) {
 			c.removeElementLocked(elem)
 		}
